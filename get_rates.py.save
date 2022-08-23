@@ -1,0 +1,25 @@
+	import requests
+import datetime
+import pandas as pd
+def get_rates(base,quote):
+	year = datetime.datetime.now().year
+	yearlast = year-1
+	month = datetime.datetime.now().month
+	day = datetime.datetime.now().day
+	today = str(year) + "-"+str(month)+"-"+str(day)
+	lastyear = str(yearlast) + "-"+str(month)+"-"+str(day)
+	url = "https://api.exchangeratesapi.io/history?start_at="+lastyear+"&end_at="+today+"&base="+base
+	latest = requests.get(url)
+	test = latest.json()
+	rates = test["rates"]
+	df = pd.DataFrame(rates)
+	pDf = processDataFrame(df)
+
+def processDataFrame(df):
+	columns = df.columns
+	index = df.index
+	df1 = df.T.sort_index()
+	print (df1.iloc[0:,0])
+	
+get_rates("EUR","USD")
+
